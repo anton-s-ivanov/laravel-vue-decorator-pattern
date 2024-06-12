@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+
+  test_users_with_skills_front:
+    build:
+      context: ./front
+    ports:
+      - "8080:80"
+
+  test_users_with_skills_back:
+    build:
+      context: ./back
+    ports:
+      - "8000:80" 
+    env_file:
+      ./back/.env
+    depends_on:
+      - test_users_with_skills_db
+    command: sh -c 'sleep 5 && php artisan migrate:refresh --seed && php-fpm --daemonize && nginx -g "daemon off;"'
+
+  test_users_with_skills_db:
+    image: postgres:14.10
+    environment:
+      POSTGRES_DB: users_with_skills
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"    
+   
