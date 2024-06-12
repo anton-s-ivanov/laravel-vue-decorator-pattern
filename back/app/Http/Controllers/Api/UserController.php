@@ -8,21 +8,24 @@ use App\Http\Requests\UserRequest;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
-    public function index()
+    public function index(): AnonymousResourceCollection
     {
         return UserResource::collection(User::all());
     }
 
     /**
      * Store a newly created resource in storage.
+     * @return App\Http\Resources\UserResource;
      */
-    public function store(UserRequest $request)
+    public function store(UserRequest $request): UserResource
     {
         try {
             $newUser = StoreUserAction::store($request);
